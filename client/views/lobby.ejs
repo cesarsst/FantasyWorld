@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/lobby.css" media="screen" />
+    <title>Lobby</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="menu">
+            <button onclick="createRoom();">Criar sala</button>
+            <button onclick="sair();">Sair</button>
+        </div>
+        <div class="lobby-container"></div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.js"  integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="  crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="js/Lobby/lobby.js"></script>
+    
+</body>
+</html>

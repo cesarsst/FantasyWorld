@@ -1,0 +1,30 @@
+body{
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+.container{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 20vh 80vh;
+    grid-template-areas:    "menu"
+                            "lobby-container";
+}
+
+.menu{
+    background-color: black;
+    display: flex;
+    grid-area: menu;
+    flex-direction: row;
+    color: red;
+}
+
+.menu button{
+    width: 200px;
+    height: 50px;
+}
+
+.lobby-container button{
+    width: 200px;
+    height: 50px;
+}

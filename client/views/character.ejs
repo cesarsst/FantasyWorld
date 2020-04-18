@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" media="screen" />
+</head>
+<body>
+
+    <div class="error"></div>
+    <div class="content">
+
+    </div>
+    
+    <br>
+    <div class="form" id="createCharModal">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br>
+    
+        <label for="classe">Classe:</label>
+        <input type="text" id="classe" name="classe"><br></br>
+        
+        <input type="submit" value="Criar Personagem" onclick="createCharacter();">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.js"  integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/character.js"></script>
+
+</body>
+</html>

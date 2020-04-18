@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vh;
+    align-items: center;
+    justify-items: center;
+
+}
+
+
+.form{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.error{
+    color: red;
+}
+
+#createCharModal{
+    display: none;
+    align-self: center;
+    justify-self: center;
+}
