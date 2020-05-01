@@ -1,20 +1,13 @@
 var charName = localStorage.getItem('charName');
 var socket = io();
 
-// Arrumar aqui
-if(localStorage.getItem('socket') == null){
-    localStorage.setItem('socket', socket)
-} else {
-    socket = localStorage.setItem('socket', socket)
-}
-
- 
 var indexRoom = [];
 
 // Character login in Lobby
-socket.emit('logingCharacter', {name: charName});
+socket.emit('loginCharacter', {name: charName});
 
-// Recive new connections 
+
+// Rebendo novas conexões do lobby
 socket.on('userConnectionUpdate', (usersConnect)=>{
     console.log('Usuarios no lobby:',  usersConnect);
 });
@@ -27,8 +20,8 @@ socket.emit('requestRooms');
 socket.on('roomsOpen', (rooms)=>{
     console.log('Salas Status:', rooms);
 
+    // Adicionado botões para entrar na sala 
     const lobbyContainer = document.getElementsByClassName('lobby-container');
-
     if(rooms.length != 0){
         rooms.forEach(room => {
 
@@ -42,12 +35,9 @@ socket.on('roomsOpen', (rooms)=>{
                  $(lobbyContainer).append(sala);
     
             }
-    
-            
-    
+
         });
     }
-   
 
 });
 
@@ -62,21 +52,25 @@ socket.on('msgErro', (data) =>{
 })
 
 // Criando uma nova sala
-function createRoom(){
+function createRoom(mapName){
     // Create new Room
-    socket.emit('createSala', map="Solaris");
+    socket.emit('createSala', map=mapName);
 
 }
 
 //Entrando em uma sala
 function enterRoom(id, map){
-    socket.emit('enterRoom', {roomId: id, roomMap: map});
 
+    localStorage.setItem('roomId', id); // Salva sala atual
+    socket.emit('enterRoom', {roomId: id, roomMap: map, charName});
+    
 }
 
 // Desconectar
 function sair(){
     socket.emit('sair');
+    localStorage.removeItem('roomId');
+    localStorage.removeItem('charName');
     location.href = '/sair';
 }
 

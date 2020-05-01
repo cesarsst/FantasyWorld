@@ -1,27 +1,35 @@
 const LoginConfig = require('./configs/Login');
 const Lobbyconfig = require('./configs/Lobby');
+const SocketConfig = require('./configs/Socket');
 const PlayerActionConfig = require('./configs/PlayerActions');
 const SessionConfig = require('./configs/Session');
 
 class Game {
 
     constructor(server){
-        this.server = server;
 
+        this.server = server;
         this.io = require('socket.io')(server);
 
+        // Configurações de atualização da estado
+        this.fpsTaxa = 35; // 30 fps por segundo
+
+        // Lista de usuários conectados e sala
         this.usersConnect = [];
         this.rooms = [];
 
         this.io.on('connection', async (socket) => {
+
             console.log('Novo usuario conectado com socket: ' + socket.id);
             
-
             // Configuração de loggin
             LoginConfig(this, socket);
 
-            // Configuração das Salas e Lobby
+            // Configuração do Lobby
             Lobbyconfig(this, socket);
+
+            // Configuração do Socket
+            SocketConfig(this, socket);
           
             // Configuração das ações dos personagens 
             PlayerActionConfig(this, socket);
@@ -37,18 +45,22 @@ class Game {
     // ===============================================================================================================
     // USERS CONTROL
     // ===============================================================================================================
-    addUserConnection(player) {
+    addUserConnection(player, socket) {
 
+
+        // verifica se usuario já esta na lista, se estiver atualiza seu socketId para o atual
         var permition = true;
         this.usersConnect.forEach(element =>{
             if(element.name == player.name){
+                element.setSocketId(socket.id);
+                console.log('Socket do usuario:'+ element.name +'atualizado para: '+ socket.id);
+                this.emmitUsersConnect();
                 permition = false;
             }
         })
 
         if(permition){
             this.usersConnect.push(player);
-            console.log("Users Connect: " + this.usersConnect);
             this.emmitUsersConnect();
         }
 
@@ -94,11 +106,57 @@ class Game {
 
     }
 
-    // Atualiza o estado da lista de salas criadas para os clients
+    // Enviando dados da sala para todos os sockets
     emitRoomsData(){
         this.io.emit('roomsOpen', this.rooms);
     }
-  
+    
+    // ===============================================================================================================
+    // PLAYER CONTROLLER
+    // ===============================================================================================================
+    emitRoomDataExclusivo(roomId){
+        this.rooms.forEach(room =>{
+            if(room.id == roomId){
+                this.io.to(roomId).emit('roomData', room.currentPlayers);
+            }
+        });
+        
+    }
+
+
+    
+    // ===============================================================================================================
+    // ENIMES CONTROL
+    // ===============================================================================================================
+    emitRoomDataExclusivoEnimes(roomId){
+        this.rooms.forEach(room => {
+            if(room.id == roomId){
+                this.io.to(roomId).emit('roomDataEnimes', room.currentEnimes);
+            }
+        });
+        
+    }
+
+    emitRoomDataExclusivoRemoveEnimes(roomId, enime){
+        this.io.to(roomId).emit('removeEnimes', enime);
+    }
+
+
+    // ===============================================================================================================
+    // ATTACK CONTROL
+    // ===============================================================================================================
+    emitRoomDataExclusivoAttacks(roomId){
+        this.rooms.forEach(room =>{
+            if(room.id == roomId){
+                this.io.to(roomId).emit('roomDataAttacks', room.currentAttacks);
+            }
+        })
+        
+    }
+
+    emitRoomDataExclusivoRemoveAttacks(roomId, attack){
+        this.io.to(roomId).emit('removeAttack', attack);
+    }
 
 }
 

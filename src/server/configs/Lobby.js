@@ -3,27 +3,21 @@ const Errors = require('../configs/logs/Errors');
 
 module.exports = (self, socket) => {
 
-    // Recebendo solicitação de salas
+    // Recebendo solicitação de salas quando entra no lobby
     socket.on('requestRooms', ()=>{
-        // Removendo de possiveis salas antes conectada.
-        self.rooms.forEach(room =>{
-            room.currentPlayers.forEach(player=>{
-                console.log(player, socket.id);
-                if(player.socketId == socket.id){
-                    room.removePlayer(player);
-                }
-            })
-        })
-
         self.emitRoomsData();
-        
     })
 
-    // Criando uma sala no servidor
+
+    // Criando uma sala no servidor e iniciando a atualização
     socket.on('createSala', (map)=>{
-        const room = new Sala(self.rooms.length, map, socket);
-        self.addNewRoom(room);
-        console.log(self.rooms);
+
+        let room = new Sala(self.rooms.length, map);
+        room.setMapConfig(map);                                 // Iniciando configurações da sala
+        room.enimesMov(self);                                   // Iniciando movimentação dos mobs da sala
+        room.colisionCalculete(self);                           // Inicinado sistema de colisões
+        
+        self.addNewRoom(room); // Adicionando sala a lista de salas globais
 
         // Teste Remove Room
         //self.removeRoom(room.id);
@@ -34,14 +28,19 @@ module.exports = (self, socket) => {
    socket.on('enterRoom', (data) => {
         
         console.log('enter room: '+ data)
-        // Verifica se o usuario já não esta em uma sala
-        if( enterPermision() ){
+        // Verifica se o usuario já não esta na sala
+        if( enterPermision(data.charName) ){
+
+            // Buscando a sala clicada
             self.rooms.forEach(room => {
                 if(room.id == data.roomId){
+                    // Buscando o usuario que irá se conectar na sala
                     self.usersConnect.forEach(player=>{
-                        
                         if(player.socketId == socket.id){
+                                // adicionando player na sala
                                 room.addNewPlayer(player);
+                                // retirando usuario do lobby
+                                self.removeUserConnection(socket.id);
                         }
                             
                     })
@@ -65,13 +64,14 @@ module.exports = (self, socket) => {
 
 
     // Validações para entrar na sala
-    function enterPermision(){
+    // Verifica se o o usuarios já não esta conectado em uma sala 
+    function enterPermision(charName){
 
         var permition = true;
 
         self.rooms.forEach(room => {
             room.currentPlayers.forEach(player =>{
-                if(player.socketId == socket.id){
+                if(player.name == charName){
                     permition = false;
                 }
             })

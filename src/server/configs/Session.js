@@ -1,6 +1,7 @@
 module.exports = (self, socket) => {
 
-    // Encerrando sessão
+   
+    // Encerrando sessão forçada
     socket.on('sair', ()=>{
         console.log('Usuário desconectado!');
         self.removeUserConnection(socket.id);
@@ -12,5 +13,10 @@ module.exports = (self, socket) => {
         self.emitRoomsData();
     });
 
+      // Encerrando sessão automatica
+      socket.on('disconnect', ()=>{
+        console.log('Usuário desconectado!');
+        self.removeUserConnection(socket.id);
+    });
 
 }

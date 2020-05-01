@@ -31,7 +31,7 @@ app.use(jsonParser);
 
 // Config EJS enginer
 app.set('view engine', 'ejs');
-app.set('views', ['./client/views']);
+app.set('views', ['./client/views', './client/views/maps']);
 
 // Configurando arquivos estaticos
 app.use(express.static('./client'));

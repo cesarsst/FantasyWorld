@@ -1,34 +1,37 @@
+const Attack = require('../data/Attack/Attack');
+
 module.exports = (self, socket) => {
 
-    socket.on('movimentPlayer', (comamand )=>{
+    // Moviment Player precisa ser tratado para verificar se as posições X, Y e COMMAND são válidas.
+    socket.on('movimentPlayer', (data)=>{
 
-        var x, y = 0; 
+        let {x, y , command } = data;
+        let animation = 0; 
+        let direction = 0;
 
-        console.log(comamand);
-        switch(comamand){
+        switch(command){
             
             case 100: // D
-                x = 10;
-                y = 0;
+                animation = 1;
+                direction = 0; // =>
                 break;
             
             case 97: // A
-                x = -10;
-                y = 0 ;
+                animation = 2;
+                direction = 1; // <=
                 break;
 
             case 119: // W 
-                y = 10;
-                x = 0;
+                animation = 0;
                 break;
 
             case 115: // S
-                y = -10;
-                x = 0;
+                animation = 0;
                 break;
-
+            
             default:
-                x, y = 0;
+                animation = 0;
+                break;
         }
 
         
@@ -36,15 +39,41 @@ module.exports = (self, socket) => {
         self.rooms.forEach(room => {
             room.currentPlayers.forEach(player =>{
                 if(player.socketId == socket.id){
-                    player.setPosition(x, y);
-                    console.log(player.x, player.y);
+                    player.setCommand(command);
+                    player.setPosition(x, y);   // Atualizando posição do player
+                    player.setAnimation(animation); // Atualiza animação do player
+                    player.setDirection(direction);
+                    self.emitRoomDataExclusivo(room.id); // Emitindo novos dados da sala
                 }
             })
         });
 
-        self.emitRoomsData();
+        
 
     });
 
+    socket.on('attackPlayer', (data)=>{
+
+        let { attack, skillName } = data;
+
+         // Buscando onde o player esta e adicionando attack
+         self.rooms.forEach(room => {
+            room.currentPlayers.forEach(player =>{
+                if(player.socketId == socket.id){
+                    
+                    // Se player não estiver em ataque, permite nova instancia.
+                    if(player.attack == false){
+                        player.setAttack(attack); // Setando player attack em false
+                        
+                        // Instanciando ataque
+                        let attackInstancia = new Attack(room.getNewAttackId(), player, skillName);
+                        attackInstancia.trigger(room, self, player); // Executa trigger do attack
+
+                    }
+
+                }
+            })
+        });
+    });
 
 }
