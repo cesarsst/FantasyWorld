@@ -39,8 +39,9 @@ para o servidor do lado do cliente, e eventos do servidor, na qual basicamente e
 Cada sala no jogo representa um canal de Socket, sendo assim cada cliente registrado em um canal, recebe somente as informações pertinentes
 a sala em que se encontra ativa.
 
-![Schema Server Side](https://raw.githubusercontent.com/cesarsst/FantasyWorld/master/Diagramas/ServerSide.png?token=AHX5GNLI4GXO5TUHMNPZKFS6VSM22)
+![Schema Server Side](https://raw.githubusercontent.com/cesarsst/FantasyWorld/master/Diagramas/ServerSide.png?token=AHX5GNLCT4ECRYFYUVCRXL26VSN6E)
 
 
 ## Demo
 
+![Schema Server Side](https://raw.githubusercontent.com/cesarsst/FantasyWorld/master/Diagramas/demo.png?token=AHX5GNOIHUO7FM76HJZO3CK6VSN6A)
