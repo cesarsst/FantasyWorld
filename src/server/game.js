@@ -8,19 +8,18 @@ class Game {
 
     constructor(server){
 
-        this.server = server;
+        // DADOS GERAIS DO JOGO
         this.io = require('socket.io')(server);
 
-        // Configurações de atualização da estado
+        // Configurações de atualização dos estados
         this.fpsTaxa = 35; // 30 fps por segundo
 
         // Lista de usuários conectados e sala
         this.usersConnect = [];
         this.rooms = [];
 
+        // RECEBENDO EVENTOS E ATUALIZANDO O JOGO
         this.io.on('connection', async (socket) => {
-
-            console.log('Novo usuario conectado com socket: ' + socket.id);
             
             // Configuração de loggin
             LoginConfig(this, socket);
@@ -38,10 +37,16 @@ class Game {
             SessionConfig(this, socket);
 
 
-        })
+        });
 
         
     }
+
+    // ===============================================================================================================
+    // ===============================FUNÇÕES PARA ENVIO DE DADOS AS SALAS============================================
+    // ===============================================================================================================
+
+
     // ===============================================================================================================
     // USERS CONTROL
     // ===============================================================================================================

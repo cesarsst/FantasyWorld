@@ -5,8 +5,10 @@ const Star = require('../Attack/Skills/Star');
  * Procura pela skill e puxa seus dados
  *
  * Ex de metadados: Inimigos presentes na sala, itens, baus, npcs, etc
- * @param {String} skillName Nome da skill a ser instânciado
- * 
+ * @param {Object} player Instância do player
+ * @param {Object} room Instância da sala
+ * @param {Object} attack Instância do attack
+ * @param {Object} self Instância da classe Game
  */
 module.exports = (player, room, attack, self) => {
 

@@ -2,14 +2,19 @@ module.exports = (player, room, attack, self) => {
 
     var demage = 10;                                   // Dano base do projetil
     var launchTime = 1500;                             // Tempo de lance da skill
-    var alcance = 400;                                 // Alcance da skill
-    var velX = (alcance * 50)/launchTime;              // Velocidade do projetil no eixo X
+    var alcance = 500;                                 // Alcance da skill
     var sprite = "star";                               // Nome do sprite a ser usado no projetil
-    var type = "projetil"                              // Tipo da skill 
+    var sizeX = 40;                                    // Tamanho da skill em X
+    var sizeY = 40;                                    // Tamanho da skill em Y
+    var type = "projetil";                             // Tipo da skill 
+
+    var velX = (alcance * self.fpsTaxa)/launchTime;    // Velocidade do projetil no eixo X
+
 
     attack.setDemage(demage);                          // Setando o dano do projetil no attack
     attack.setSprite(sprite);                          // Setando o sprite da skill
     attack.setType(type);                              // Setando o tipo da skill
+    attack.setSize(sizeX, sizeY);                      // Setando o tamanho do box colider
 
     // Calculando o valor final em X
     var xFinal = [];

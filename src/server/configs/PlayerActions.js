@@ -1,5 +1,14 @@
 const Attack = require('../data/Attack/Attack');
 
+/**
+ * Responsável pela: 
+ * -Movimentação, animação dos Player
+ * -Instancia de Ataques, Animação de skills e cooldown
+ * 
+ * @param {Object} self Classe Game
+ * @param {Object} socket Socket da conexão ativa
+ * 
+ */
 module.exports = (self, socket) => {
 
     // Moviment Player precisa ser tratado para verificar se as posições X, Y e COMMAND são válidas.
@@ -67,7 +76,7 @@ module.exports = (self, socket) => {
                         
                         // Instanciando ataque
                         let attackInstancia = new Attack(room.getNewAttackId(), player, skillName);
-                        attackInstancia.trigger(room, self, player); // Executa trigger do attack
+                        attackInstancia.trigger(room, self, player); // Executa trigger do attack e adiciona a lista de current attacks
 
                     }
 

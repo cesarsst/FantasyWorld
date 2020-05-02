@@ -1,6 +1,15 @@
 const Sala = require('../data/Salas/Sala');
 const Errors = require('../configs/logs/Errors');
 
+/**
+ * Responsável pela criação de salas e suas inicializações (Trigger de mapa, movimentações de inimigos e colisões),
+ * adicionar um usuário que deseja conectar em uma sala específica e redirecionar para a sala em questão.
+ * 
+ * 
+ * @param {Object} self Classe Game
+ * @param {Object} socket Socket da conexão ativa
+ * 
+ */
 module.exports = (self, socket) => {
 
     // Recebendo solicitação de salas quando entra no lobby

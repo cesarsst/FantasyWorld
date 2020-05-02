@@ -8,11 +8,13 @@ module.exports.calculeteAttack = (self, room) => {
                 var xInterval = [];
                 var yInterval = [];
 
-                xInterval.push(attack.x - 20);
-                xInterval.push(attack.x + 20);
-                yInterval.push(attack.y - 20);
-                yInterval.push(attack.y + 20);
+                xInterval.push(attack.x - attack.size.x/2);
+                xInterval.push(attack.x + attack.size.x/2);
+                yInterval.push(attack.y - attack.size.y/2);
+                yInterval.push(attack.y + attack.size.y/2);
 
+
+                // Colision Attack/Enime
                 if(enime.x >= xInterval[0] && enime.x <= xInterval[1]){
                     if(enime.y >= yInterval[0] && enime.y <= yInterval[1]){
                         
@@ -27,7 +29,7 @@ module.exports.calculeteAttack = (self, room) => {
                     }
                 }
 
-            })
+            });
             
 
             self.emitRoomDataExclusivoAttacks(room.id);

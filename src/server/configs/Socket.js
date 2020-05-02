@@ -1,3 +1,12 @@
+/**
+ * Cadastra o socket atual para escutar os dados do canal da sala. 
+ * Responsável por atualizar um socket de um player em uma determiada sala caso de refresh na pagina do jogo
+ * ou se desconecte por fatores externos.
+ * 
+ * @param {Object} self Classe Game
+ * @param {Object} socket Socket da conexão ativa
+ * 
+ */
 module.exports = (self, socket) => {
 
     // Atualizando o socket do personagem da sala

@@ -13,6 +13,7 @@ class Attack{
         this.damage = 0;
         this.sprite = "";
         this.type = "";
+        this.size = {x: 0, y: 0};
     }
 
     trigger(room, self, player){
@@ -34,6 +35,11 @@ class Attack{
 
     setType(type){
         this.type = type;
+    }
+
+    setSize(x, y){
+        this.size.x = x;
+        this.size.y = y;
     }
 
 }

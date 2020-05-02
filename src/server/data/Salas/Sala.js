@@ -11,6 +11,7 @@ class Sala {
         this.currentAttacks = [];
     }
 
+    
     addNewPlayer(player){
         this.currentPlayers.push(player);
         console.log("Usuário conectado na sala!");
@@ -98,6 +99,12 @@ class Sala {
         })
     }
      
+    /**
+     * Realiza o cálculo de colisão da sala atual.
+     * 
+     * @param {Object} self Classe Game
+     * 
+     */
     colisionCalculete(self){
         Collision.calculeteAttack(self, this);
     }

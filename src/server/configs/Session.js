@@ -1,3 +1,10 @@
+/**
+ * Responsável pela finalização de uma comunicação e sessão no servidor.
+ *
+ * @param {Object} self Classe Game
+ * @param {Object} socket Socket da conexão ativa
+ * 
+ */
 module.exports = (self, socket) => {
 
    
