@@ -2,7 +2,7 @@
 
 ## Começando a utilizar:
 
-Para começar a atualizar faço o clone do repositório para seu computador.
+Para começar a atualizar faça o clone do repositório para seu computador.
 Algumas configurações precisam ser feitas para o mongoDB (é utilizado o serviço moongose)
 
 Crie um arquivo .env na pasta raiz do projeto e adicione os seguintes dados:
