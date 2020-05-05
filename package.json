@@ -5,6 +5,7 @@
   "author": "Cesar Soares Stenico ",
   "license": "MIT",
   "scripts": {
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "dependencies": {
