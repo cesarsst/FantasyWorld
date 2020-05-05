@@ -1,9 +1,11 @@
 const Attack = require('../data/Attack/Attack');
+const Message = require('../data/Chat/Menssage');
 
 /**
  * Responsável pela: 
  * -Movimentação, animação dos Player
  * -Instancia de Ataques, Animação de skills e cooldown
+ * -Mensagens do chat
  * 
  * @param {Object} self Classe Game
  * @param {Object} socket Socket da conexão ativa
@@ -85,4 +87,14 @@ module.exports = (self, socket) => {
         });
     });
 
+    socket.on('msgPlayer', (data)=>{
+        self.rooms.forEach(room=>{
+            room.currentPlayers.forEach(player =>{
+                if(player.socketId == socket.id){
+                    let message = new Message(player.name, data.msg);
+                    room.addNewMsg(message, self);
+                }
+            })
+        })
+    })
 }

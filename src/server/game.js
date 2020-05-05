@@ -163,6 +163,17 @@ class Game {
         this.io.to(roomId).emit('removeAttack', attack);
     }
 
+    // ===============================================================================================================
+    // CHAT CONTROL
+    // ===============================================================================================================
+    emitRoomDataExclusivoChat(roomId){
+        this.rooms.forEach(room =>{
+            if(room.id == roomId){
+                this.io.to(roomId).emit('roomDataChat', room.chat);
+            }
+        })
+        
+    }
 }
 
 module.exports = Game;

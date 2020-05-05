@@ -119,6 +119,7 @@ function addPlayer(player, self){
  
      // Adicionando container para variavel do usuario ativo
      self.playerActive = container;
+
 }
 
 

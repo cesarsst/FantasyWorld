@@ -1,4 +1,4 @@
-const Solaris = require('../data/Maps/Solaris');
+const Solaris = require('../Maps/Solaris');
 
 /**
  * Procura pelo MetaDado da sala a ser instânciada
@@ -7,12 +7,15 @@ const Solaris = require('../data/Maps/Solaris');
  * @param {String} map Nome do mapa a ser instânciado
  * 
  */
-module.exports = (map) => {
+module.exports = (map, room) => {
 
     switch(map){
 
         case "Solaris":
-            return { enimes: Solaris.enimes() };
+            return { 
+                enimes: Solaris.enimes(room), 
+                events: Solaris.events()
+            };
             break;
             
     }       

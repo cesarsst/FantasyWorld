@@ -22,11 +22,9 @@ module.exports = (self, socket) => {
     socket.on('createSala', (map)=>{
 
         let room = new Sala(self.rooms.length, map);
-        room.setMapConfig(map);                                 // Iniciando configurações da sala
-        room.enimesMov(self);                                   // Iniciando movimentação dos mobs da sala
-        room.colisionCalculete(self);                           // Inicinado sistema de colisões
-        
-        self.addNewRoom(room); // Adicionando sala a lista de salas globais
+        room.createRoom(map, self, socket);                          // Iniciando configurações da sala
+    
+        self.addNewRoom(room);                                       // Adicionando sala a lista de salas globais
 
         // Teste Remove Room
         //self.removeRoom(room.id);

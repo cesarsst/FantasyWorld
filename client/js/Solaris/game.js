@@ -9,17 +9,14 @@ class gameStart extends Phaser.Scene{
         // Criação do mapa
         this.createMap();
 
-        // UI Cliente
-        this.createUI();
-
          // Animations
         this.createAnimations();
         
         // Socket game 
         this.socketConfigs();
-
-        // Keyboard Controller
-        this.cursors = this.input.keyboard.addKeys('W,S,A,D, R');
+        
+        // Create Chat
+        this.createUI();
     }
 
     update(){
@@ -57,14 +54,6 @@ class gameStart extends Phaser.Scene{
          this.moita1 = this.add.sprite(680,465, 'solaris','moita1.png').setOrigin(0,0);
     }
 
-    // Função da UI
-    createUI(){
-        // Playin Game Text
-        this.add.text(20, 20, "Playing game", {
-            font: "25px Arial",
-             fill:"yellow"
-        });
-    }
    
      // Animations
      createAnimations(){
@@ -109,7 +98,48 @@ class gameStart extends Phaser.Scene{
         gameUpdate(this);
     }
 
-   
+   // Função da UI
+    createUI(){
+
+        // Keyboard Controller
+        this.cursors = this.input.keyboard.addKeys('W,S,A,D,R');
+
+        var chat = this.add.dom(10, 450).createFromCache('chat');
+        var inputTextValue = chat.getChildByName('textInput');
+        var textArea = document.getElementById('textArea');
+
+        chat.setOrigin(0,0);
+        
+        chat.addListener('click');
+        chat.on('click', (event) => {
+
+            $(textArea).animate({ scrollTop: 99999999 }, 'slow');
+            this.chatOpen = true;
+            this.input.keyboard.removeCapture('W,S,A,D,R');
+            
+            if(event.target.name == 'enviar'){
+                this.chatOpen = false;
+                this.cursors = this.input.keyboard.addKeys('W,S,A,D,R');
+                if(inputTextValue.value != ""){
+                    this.socket.emit('msgPlayer', {msg:inputTextValue.value});
+                }
+                inputTextValue.value = "";
+            } 
+            
+        });
+
+        this.chatButton = this.add.image(0,300, "star").setOrigin(0,0).setInteractive();
+        this.chatButton.on('pointerup', function(){
+            if(chat._visible == false){
+                chat.setVisible(true);
+            } else {
+                chat.setVisible(false);
+            }
+            
+        })
+    
+        
+    }
         
     
 

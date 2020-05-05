@@ -4,6 +4,8 @@ var roomId = localStorage.getItem('roomId');
 
 function gameUpdate(self){
     
+    self.socket = socket;
+
     // Outros jogadores
     self.otherPlayers = self.physics.add.group();
 
@@ -44,6 +46,17 @@ function gameUpdate(self){
 
     socket.on('removeAttack', (attack)=>{
         removeAttacks(self, attack);
+    })
+
+    // CHAT CONTROLLER
+    socket.on('roomDataChat', (messages)=>{
+        var textArea = document.getElementById('textArea');
+        $(textArea).animate({ scrollTop: 99999999 }, 'slow');
+        messages.forEach(message => {
+            $(textArea).append(message.player + ': '+ message.msg + '<br>');
+        })
+        
+        
     })
 
 }

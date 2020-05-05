@@ -1,9 +1,9 @@
 class Cogumelo{
 
-    constructor(id, x, y){
-        this.id = id;
+    constructor(x, y){
+        this.id;
         this.name = 'Cogumelo';
-        this.hp = 100;
+        this.hp = 10;
         this.sprite = 'cogumelo';
         this.x = x;
         this.y =  y;
@@ -12,7 +12,11 @@ class Cogumelo{
         this.animations = {
             attack: 'attack/cogumelo'
         };
-        this.velX = (600 * 50)/ 5000;    // 600 px em 5 segundos (20fps);
+        this.velX = (600 * 35)/ 10000;    // 600 px em 10 segundos (30fps);
+    }
+
+    setId(id){
+        this.id = id;
     }
 
     setPosition(x, y){
@@ -24,6 +28,7 @@ class Cogumelo{
         this.hp -= attack.damage;
     }
 
+    // INTELIGENCIA ARTIFICIAL DO MOB
     start(self, room){
 
         setInterval(()=>{

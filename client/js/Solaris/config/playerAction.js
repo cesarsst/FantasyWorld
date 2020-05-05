@@ -3,7 +3,7 @@ function playerAction(self){
     var command = 0;
 
      // Player movs
-     if (self.playerActive) {
+    if(self.playerActive && !self.chatOpen) {
         
         self.playerActive.body.setVelocityX(0);
         // Horizontal movement
