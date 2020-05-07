@@ -68,10 +68,10 @@ function spotCogumelo(self, room, event) {
 
 function dieMotherFuck(self, room, event){
     setTimeout(()=>{
-        for(let i=0; i<1000; i++){
+        for(let i=0; i<100; i++){
             room.addNewEnime(new Cogumelo(randomPosition.positionX(300, 900), 520), self);
         }
-    }, 15000);
+    }, 10000);
 
     event.status = false;
 

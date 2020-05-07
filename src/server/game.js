@@ -12,7 +12,7 @@ class Game {
         this.io = require('socket.io')(server);
 
         // Configurações de atualização dos estados
-        this.fpsTaxa = 15; // 30 fps por segundo
+        this.fpsTaxa = 35; // 30 fps por segundo
 
         // Lista de usuários conectados e sala
         this.usersConnect = [];

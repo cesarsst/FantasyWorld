@@ -13,7 +13,7 @@ module.exports = (room, Game) => {
      */
     room.addNewMsg = function (msg, Game){
         room.chat.push(msg);
-        Game.emitRoomDataExclusivoChat(room.id);
+        room.emitRoomChat();
     }
 
     room.removeMsg = function(msgId){
@@ -26,7 +26,7 @@ module.exports = (room, Game) => {
     }
 
     room.emitRoomChat= function(){
-        Game.io.to(roomId).emit('roomDataChat', room.chat); 
+        Game.io.to(room.id).emit('roomDataChat', room.chat); 
     }
 
 }
