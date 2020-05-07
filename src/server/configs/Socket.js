@@ -16,7 +16,7 @@ module.exports = (self, socket) => {
             if(room.id == data.roomId){
                 socket.join(room.id);   // Cadastrando para ouvir a sala
                 room.updateSocketPlayer(data.name, socket.id); // update do socket id
-                self.emitRoomDataExclusivo(room.id); // Emitindo atualização somente para usuarios cadastrados da sala;
+                room.emitRoomPlayers(); // Emitindo atualização somente para usuarios cadastrados da sala;
             }
             
         })

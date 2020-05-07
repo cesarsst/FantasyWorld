@@ -6,7 +6,12 @@ function enimesUpdate(self, enimeData){
     self.enimesGroup.getChildren().forEach(enimeContainer =>{
         if(enimeContainer.id == enimeData.id){
             setEnimePosition(enimeContainer, enimeData);
-            setEnimeAnimation(enimeContainer, enimeData);
+
+            if(enimeContainer.animation != enimeData.animations.attack){
+                enimeContainer.animation == enimeData.animations.attack;
+                setEnimeAnimation(enimeContainer, enimeData);
+            }
+        
             instanciaEnime = false;
         }
     });
@@ -32,7 +37,12 @@ function setEnimePosition(enimeContainer, enimeData){
     }
     enimeContainer.x = enimeData.x;
     enimeContainer.y = enimeData.y;
-    enimeContainer.getAt(2).setText(enimeData.hp);
+
+    if(enimeContainer.hp != enimeData.hp){
+        enimeContainer.hp = enimeData.hp
+        enimeContainer.getAt(2).setText(enimeData.hp);
+    }
+    
 
 }
 
@@ -46,6 +56,7 @@ function setEnimeAnimation(enimeContainer, enimeData){
 function addEnime(enimeData, self){
     // Enime info view
     const newEnime = self.add.sprite(0, 0, 'solaris', enimeData.sprite + '/mov1.png');
+   
     const name = self.add.text(-35, -40, enimeData.name, {
         fontSize: '14px',
         fill: 'yellow',
@@ -58,13 +69,19 @@ function addEnime(enimeData, self){
         fontStyle: 'bold'
     });
 
+  
+
     // Propriedades do container do inimigo 
     const container = self.add.container(enimeData.x, enimeData.y);
     container.id = enimeData.id;
+    container.animation = "";
+    container.hp = "";
+
     container.setSize(40, 40);
     container.add(newEnime);
     container.add(name);
     container.add(hp);
+    
 
     // Colliders sets
     self.physics.world.enable(container);
@@ -79,7 +96,5 @@ function removeEnimes(self, enime){
         if(enimeContainer.id == enime.id){
             self.enimesGroup.remove(enimeContainer, true, true);
         }
-
-        console.log(self.enimesGroup);
     });
 }

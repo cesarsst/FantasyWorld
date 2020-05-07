@@ -31,31 +31,27 @@ class Cogumelo{
     // INTELIGENCIA ARTIFICIAL DO MOB
     start(self, room){
 
-        setInterval(()=>{
+        //  CONTROLE DO HP DO MOB
+        if(this.hp <= 0){
+            room.removeEnime(this, self);
+        }
 
-            //  CONTROLE DO HP DO MOB
-            if(this.hp <= 0){
-                room.removeEnime(this, self);
-            }
+        // CONTROLE DA MOVIMENTAÇÃO -- DIRECTION => 0 right , 1 left;
+        if(this.x > 900){
+            this.direction = 1;
+        } else if(this.x < 300){
+            this.direction = 0;
+        } 
+        
+        if (this.direction == 0){
+            this.setPosition(this.x + this.velX, this.y);
+            this.command = 0;
+        } else {
+            this.setPosition(this.x - this.velX, this.y);
+            this.command = 1;
+        } 
 
-            // CONTROLE DA MOVIMENTAÇÃO -- DIRECTION => 0 right , 1 left;
-            if(this.x > 900){
-                this.direction = 1;
-            } else if(this.x < 300){
-                this.direction = 0;
-            } 
-            
-            if (this.direction == 0){
-                this.setPosition(this.x + this.velX, this.y);
-                this.command = 0;
-            } else {
-                this.setPosition(this.x - this.velX, this.y);
-                this.command = 1;
-            } 
-            
-            self.emitRoomDataExclusivoEnimes(room.id);          // Emitindo novo estado do mob
-
-        }, self.fpsTaxa);
+        
     }
 
 }

@@ -85,11 +85,13 @@ class gameStart extends Phaser.Scene{
         });
     
         var frameNames = this.anims.generateFrameNames('solaris', {
-            start: 1, end: 5, zeroPad:1,
-            prefix: 'cogumelo/mov', suffix: '.png'
+            start: 1,
+            end: 5, 
+            zeroPad:1,
+            prefix: 'cogumelo/mov', suffix: '.png',
         });
 
-        this.anims.create({ key: 'attack/cogumelo', frames: frameNames, frameRate: 10, repeat: 0 });
+        this.anims.create({ key: 'attack/cogumelo', frames: frameNames, frameRate: 10, repeat: -1 });
         
     }
 
@@ -121,6 +123,7 @@ class gameStart extends Phaser.Scene{
                 this.chatOpen = false;
                 this.cursors = this.input.keyboard.addKeys('W,S,A,D,R');
                 if(inputTextValue.value != ""){
+                    //Socket Chat Emmiter
                     this.socket.emit('msgPlayer', {msg:inputTextValue.value});
                 }
                 inputTextValue.value = "";

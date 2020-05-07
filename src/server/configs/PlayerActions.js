@@ -7,11 +7,11 @@ const Message = require('../data/Chat/Menssage');
  * -Instancia de Ataques, Animação de skills e cooldown
  * -Mensagens do chat
  * 
- * @param {Object} self Classe Game
+ * @param {Object} Game Classe Game
  * @param {Object} socket Socket da conexão ativa
  * 
  */
-module.exports = (self, socket) => {
+module.exports = (Game, socket) => {
 
     // Moviment Player precisa ser tratado para verificar se as posições X, Y e COMMAND são válidas.
     socket.on('movimentPlayer', (data)=>{
@@ -47,14 +47,14 @@ module.exports = (self, socket) => {
 
         
         // Buscando onde o player esta e atualizando sua posição
-        self.rooms.forEach(room => {
+        Game.rooms.forEach(room => {
             room.currentPlayers.forEach(player =>{
                 if(player.socketId == socket.id){
                     player.setCommand(command);
-                    player.setPosition(x, y);   // Atualizando posição do player
-                    player.setAnimation(animation); // Atualiza animação do player
+                    player.setPosition(x, y);               // Atualizando posição do player
+                    player.setAnimation(animation);         // Atualiza animação do player
                     player.setDirection(direction);
-                    self.emitRoomDataExclusivo(room.id); // Emitindo novos dados da sala
+                    room.emitRoomPlayers();           // Emitindo novos dados da sala
                 }
             })
         });
@@ -68,7 +68,7 @@ module.exports = (self, socket) => {
         let { attack, skillName } = data;
 
          // Buscando onde o player esta e adicionando attack
-         self.rooms.forEach(room => {
+         Game.rooms.forEach(room => {
             room.currentPlayers.forEach(player =>{
                 if(player.socketId == socket.id){
                     
@@ -78,7 +78,7 @@ module.exports = (self, socket) => {
                         
                         // Instanciando ataque
                         let attackInstancia = new Attack(room.getNewAttackId(), player, skillName);
-                        attackInstancia.trigger(room, self, player); // Executa trigger do attack e adiciona a lista de current attacks
+                        attackInstancia.trigger(room, Game, player); // Executa trigger do attack e adiciona a lista de current attacks
 
                     }
 
@@ -88,11 +88,11 @@ module.exports = (self, socket) => {
     });
 
     socket.on('msgPlayer', (data)=>{
-        self.rooms.forEach(room=>{
+        Game.rooms.forEach(room=>{
             room.currentPlayers.forEach(player =>{
                 if(player.socketId == socket.id){
                     let message = new Message(player.name, data.msg);
-                    room.addNewMsg(message, self);
+                    room.addNewMsg(message, Game);
                 }
             })
         })

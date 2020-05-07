@@ -5,16 +5,15 @@
  * 
  * O cálculo de colisões é feita de acordo com o fpsTaxa definido na classe Game
  * 
- * @param {Object} self Instância da classe Game
+ * @param {Object} Game Instância da classe Game
  * @param {Object} room Instância da sala
  */
-module.exports = (self, room) => {
+module.exports = (Game, room) => {
 
-    setInterval(() =>{ 
-        calculeteAttack(self, room);
-
-        self.emitRoomDataExclusivoAttacks(room.id);
-    }, self.fpsTaxa);
+    
+    calculeteAttack(Game, room);
+    room.emitRoomAttacks();
+    
 
 }
 
@@ -23,10 +22,10 @@ module.exports = (self, room) => {
  * 
  * Toda logica de atribuição de dano a um inimigo vindo de um player, assim como a remoção
  * do ataque após atingir um inimigo é feita aqui.
- * @param {Object} self Instância da classe Game
+ * @param {Object} Game Instância da classe Game
  * @param {Object} room Instância da sala
  */
-function calculeteAttack(self, room) {
+function calculeteAttack(Game, room) {
     room.currentAttacks.forEach(attack => {
 
         room.currentEnimes.forEach(enime =>{
@@ -49,7 +48,7 @@ function calculeteAttack(self, room) {
 
                     // Ação do ataque após contato
                     if(attack.type == "projetil"){
-                        room.removeAttack(attack.id, self);
+                        room.removeAttack(attack.id);
                     }
                     
                 }

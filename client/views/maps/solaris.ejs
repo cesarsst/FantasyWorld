@@ -14,8 +14,7 @@
     </div></center>
 
    
-
-    <script src="https://code.jquery.com/jquery-3.5.0.js"  integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     
     <script type="text/javascript" src="js/phaser.js"></script>
@@ -35,23 +34,8 @@
     <script type="text/javascript" src="js/Solaris/game.js"></script>
     <script type="text/javascript" src="js/Solaris/config/config.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script>
-        
-        var controlChatSend = 0;
-        $(document).keypress(function(e) {
-           
-            if(e.which == 13 && controlChatSend == 0){
-                $('#textInput').click()
-                $('#textInput').select();
-                controlChatSend = 1;
-            } else if( e.which == 13 && controlChatSend == 1) {
-                $('#enviar').click();
-                $('#textInput').blur();
-                controlChatSend = 0;
-            }
-        });
-    </script>
+    <!-- UI Controller-->
+    <script type="text/javascript" src="js/config/chat.js"></script>
 
 </body>
 </html>

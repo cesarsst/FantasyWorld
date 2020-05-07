@@ -12,7 +12,7 @@ class Game {
         this.io = require('socket.io')(server);
 
         // Configurações de atualização dos estados
-        this.fpsTaxa = 35; // 30 fps por segundo
+        this.fpsTaxa = 15; // 30 fps por segundo
 
         // Lista de usuários conectados e sala
         this.usersConnect = [];
@@ -41,14 +41,8 @@ class Game {
 
         
     }
-
     // ===============================================================================================================
-    // ===============================FUNÇÕES PARA ENVIO DE DADOS AS SALAS============================================
-    // ===============================================================================================================
-
-
-    // ===============================================================================================================
-    // USERS CONTROL
+    // LOBBY CONTROL
     // ===============================================================================================================
     addUserConnection(player, socket) {
 
@@ -115,65 +109,8 @@ class Game {
     emitRoomsData(){
         this.io.emit('roomsOpen', this.rooms);
     }
-    
-    // ===============================================================================================================
-    // PLAYER CONTROLLER
-    // ===============================================================================================================
-    emitRoomDataExclusivo(roomId){
-        this.rooms.forEach(room =>{
-            if(room.id == roomId){
-                this.io.to(roomId).emit('roomData', room.currentPlayers);
-            }
-        });
-        
-    }
 
 
-    
-    // ===============================================================================================================
-    // ENIMES CONTROL
-    // ===============================================================================================================
-    emitRoomDataExclusivoEnimes(roomId){
-        this.rooms.forEach(room => {
-            if(room.id == roomId){
-                this.io.to(roomId).emit('roomDataEnimes', room.currentEnimes);
-            }
-        });
-        
-    }
-
-    emitRoomDataExclusivoRemoveEnimes(roomId, enime){
-        this.io.to(roomId).emit('removeEnimes', enime);
-    }
-
-
-    // ===============================================================================================================
-    // ATTACK CONTROL
-    // ===============================================================================================================
-    emitRoomDataExclusivoAttacks(roomId){
-        this.rooms.forEach(room =>{
-            if(room.id == roomId){
-                this.io.to(roomId).emit('roomDataAttacks', room.currentAttacks);
-            }
-        })
-        
-    }
-
-    emitRoomDataExclusivoRemoveAttacks(roomId, attack){
-        this.io.to(roomId).emit('removeAttack', attack);
-    }
-
-    // ===============================================================================================================
-    // CHAT CONTROL
-    // ===============================================================================================================
-    emitRoomDataExclusivoChat(roomId){
-        this.rooms.forEach(room =>{
-            if(room.id == roomId){
-                this.io.to(roomId).emit('roomDataChat', room.chat);
-            }
-        })
-        
-    }
 }
 
 module.exports = Game;
