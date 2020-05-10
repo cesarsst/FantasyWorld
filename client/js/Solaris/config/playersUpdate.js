@@ -110,13 +110,13 @@ function addPlayer(player, self){
      container.setSize(40, 40);
      container.add(self.playerActiveSprite);
      container.add(name);
-
+     
 
      // Colliders sets
      self.physics.world.enable(container);
-     container.body.setCollideWorldBounds(true);
+     container.body.collideWorldBounds=true;
      self.physics.add.collider(container, self.piso);
- 
+     
      // Adicionando container para variavel do usuario ativo
      self.playerActive = container;
 

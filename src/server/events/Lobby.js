@@ -1,5 +1,5 @@
 const Sala = require('../data/Salas/Sala');
-const Errors = require('../configs/logs/Errors');
+const Errors = require('./logs/Errors');
 
 /**
  * Responsável pela criação de salas e suas inicializações (Trigger de mapa, movimentações de inimigos e colisões),
@@ -13,39 +13,33 @@ const Errors = require('../configs/logs/Errors');
 module.exports = (Game, socket) => {
 
     // Recebendo solicitação de salas quando entra no lobby
-    socket.on('requestRooms', ()=>{
-        Game.emitRoomsData();
+    socket.on('requestRegions', ()=>{
+        Game.emitRegionsData();
     })
 
-    // Criando uma sala no servidor e iniciando a atualização
-    socket.on('createSala', (map)=>{
-
-        let room = new Sala(Game.rooms.length, map);
-        room.createRoom(map, Game, socket);                          // Iniciando configurações da sala
-        Game.addNewRoom(room);                                       // Adicionando sala a lista de salas globais
-
-        // Teste Remove Room
-        //Game.removeRoom(room.id);
-        //console.log(Game.rooms);
-    });
-
+  
    // Entrando em uma sala especifica
-   socket.on('enterRoom', (data) => {
+   socket.on('enterRegion', (data) => {
         
-        console.log('enter room: '+ data)
-        // Verifica se o usuario já não esta na sala
-        if( enterPermision(data.charName) ){
+        let { charName, regionId, nameMap} = data;
+
+        // Verifica se o usuario já não esta na região
+        if( enterPermision(charName) ){
 
             // Buscando a sala clicada
-            Game.rooms.forEach(room => {
-                if(room.id == data.roomId){
+            Game.regions.forEach(region => {
+                if(region.id == regionId){
                     // Buscando o usuario que irá se conectar na sala
-                    Game.usersConnect.forEach(player=>{
+                    Game.currentUsers.forEach(player=>{
                         if(player.socketId == socket.id){
-                                // adicionando player na sala
-                                room.addNewPlayer(player);
+                                
+                                // adicionando player na região clicada
+                                region.addNewPlayer(player);
+                                
+                                nameMap = region.nameMap;
+
                                 // retirando usuario do lobby
-                                Game.removeUserConnection(socket.id);
+                                Game.removeUserConnection(charName);
                         }
                             
                     })
@@ -53,10 +47,10 @@ module.exports = (Game, socket) => {
             });
 
             // enviando dados atualizados para os outros clientes
-            Game.emitRoomsData();
+            Game.emitRegionsData();
 
             // Redireciona para a sala 
-            socket.emit('redirectRoom', data.roomMap);
+            socket.emit('redirectRegion', nameMap);
 
         } else {
             // Log Error Emit
@@ -68,14 +62,14 @@ module.exports = (Game, socket) => {
     });
 
 
-    // Validações para entrar na sala
-    // Verifica se o o usuarios já não esta conectado em uma sala 
+    
+    // Verifica se o o usuarios já não esta conectado em uma regiao
     function enterPermision(charName){
 
         var permition = true;
 
-        Game.rooms.forEach(room => {
-            room.currentPlayers.forEach(player =>{
+        Game.regions.forEach(region => {
+            region.currentPlayers.forEach(player =>{
                 if(player.name == charName){
                     permition = false;
                 }

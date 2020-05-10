@@ -9,7 +9,7 @@ const setMapConfig = require('./configs/setMapConfig');
 
 class Sala {
 
-    constructor(id, map){
+    constructor(id, map, x, y, width, heigth){
         this.id = id;
         this.map = map;
         this.currentPlayers = [];
@@ -18,6 +18,7 @@ class Sala {
         this.events = [];
         this.chat = [];
         this.totalEnimes = 0;
+        this.limitScene = {x:x, y:y, width:width, heigth:heigth}
     }
 
 
@@ -29,27 +30,27 @@ class Sala {
      * Seta os dados do mapa e eventos para a sala em questão
      * @param {String} map Nome do mapa a ser instânciado na sala
      */
-    createRoom(map, Game, socket){
+    createRoom(map, ServerGame){
         
         //==========================================================================================================
         // CONFIGURAÇÕES DO CHAT
         //==========================================================================================================
-        chatConfig(this, Game);
+        chatConfig(this, ServerGame);
 
         //==========================================================================================================
         // CONFIGURAÇÕES DOS PLAYERS DA SALA
         //==========================================================================================================
-        playerConfig(this, Game);
+        playerConfig(this, ServerGame);
 
         //==========================================================================================================
         // CONFIGURAÇÕES DOS INIMIGOS DA SALA
         //==========================================================================================================
-        enimeConfig(this, Game);
+        enimeConfig(this, ServerGame);
 
         //==========================================================================================================
         // CONFIGURAÇÕES DOS ATAQUES DA SALA
         //==========================================================================================================
-        attackConfig(this, Game);
+        attackConfig(this, ServerGame);
 
         //==========================================================================================================
         // CONFIGURAÇÕES DOS EVENTOS DA SALA
@@ -59,34 +60,31 @@ class Sala {
         //==========================================================================================================
         // INICIANDO UPDATE DA SALA
         //==========================================================================================================
-        this.updateRoom(Game, socket);
+        this.updateRoom(ServerGame);
 
         //==========================================================================================================
         // SETANDO INIMIGOS E EVENTOS DA SALA
         //==========================================================================================================
-        setMapConfig(this, map, Game);
+        setMapConfig(this, map, ServerGame);
     }
 
     /**
      * Realiza o update da sala X vez por segundo (x = fpsTaxa);
      * 
-     * @param {Object} Game Classe Game
+     * @param {Object} ServerGame Classe ServerGame
      * 
      */
-    updateRoom(Game){
+    updateRoom(ServerGame){
 
         setInterval(()=>{
 
-            Collision(Game, this);                    // Sistema de colisão dos ataques
-            this.startEvents(Game, this);             // Sistema de eventos da sala
-            this.enimesUpdate(Game, this);            // Sistema de atualização dos inimigos
+            Collision(ServerGame, this);                    // Sistema de colisão dos ataques
+            this.startEvents(ServerGame, this);             // Sistema de eventos da sala
+            this.enimesUpdate(ServerGame, this);            // Sistema de atualização dos inimigos
         
-        }, Game.fpsTaxa);
+        }, ServerGame.fpsTaxa);
       
     }
-
-    
-
 
 }
 

@@ -28,7 +28,5 @@ body {
 .chatArea{
     width: 100px;
     height: 100px;
-    z-index: 99;
     background-color: black;
-    position: fixed;
 }

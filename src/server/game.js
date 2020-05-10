@@ -1,115 +1,85 @@
-const LoginConfig = require('./configs/Login');
-const Lobbyconfig = require('./configs/Lobby');
-const SocketConfig = require('./configs/Socket');
-const PlayerActionConfig = require('./configs/PlayerActions');
-const SessionConfig = require('./configs/Session');
+const Region = require('./data/Region/Region');
+const Login = require('./events/Login');
+const Lobby = require('./events/Lobby');
+const Socket = require('./events/Socket');
+const PlayerActions = require('./events/PlayerActions');
 
 class Game {
 
     constructor(server){
 
-        // DADOS GERAIS DO JOGO
-        this.io = require('socket.io')(server);
-
         // Configurações de atualização dos estados
         this.fpsTaxa = 35; // 30 fps por segundo
 
-        // Lista de usuários conectados e sala
-        this.usersConnect = [];
-        this.rooms = [];
+        this.regions = [];
 
-        // RECEBENDO EVENTOS E ATUALIZANDO O JOGO
+        this.currentUsers = [];
+
+        // Iniciando Socket
+        this.io = require('socket.io')(server);
+
+        // SETANDO EVENTOS QUE SERAM RECEBIDO DOS PLAYERS
         this.io.on('connection', async (socket) => {
-            
-            // Configuração de loggin
-            LoginConfig(this, socket);
 
-            // Configuração do Lobby
-            Lobbyconfig(this, socket);
+            // ESCUTA UM LOGGIN E PUXA O PLAYER PARA A LISTA DE CURRENT USERS
+            Login(this, socket);
+            Lobby(this, socket);
+            Socket(this, socket);
+            PlayerActions(this, socket);
 
-            // Configuração do Socket
-            SocketConfig(this, socket);
-          
-            // Configuração das ações dos personagens 
-            PlayerActionConfig(this, socket);
-    
-            // Configuração de sessão
-            SessionConfig(this, socket);
+        })
 
-
-        });
-
-        
+        this.startServer();
     }
-    // ===============================================================================================================
-    // LOBBY CONTROL
-    // ===============================================================================================================
-    addUserConnection(player, socket) {
 
+    startServer(){
 
-        // verifica se usuario já esta na lista, se estiver atualiza seu socketId para o atual
+        var Solaris = new Region(this.regions.length, 'Solaris', 25);
+        Solaris.createScenes(this);
+        this.regions.push(Solaris);
+
+    }
+
+    addUserConnection(player){
+
         var permition = true;
-        this.usersConnect.forEach(element =>{
-            if(element.name == player.name){
-                element.setSocketId(socket.id);
-                console.log('Socket do usuario:'+ element.name +'atualizado para: '+ socket.id);
-                this.emmitUsersConnect();
-                permition = false;
+        this.currentUsers.forEach(playerOnline =>{
+            if(playerOnline.name == player.name){
+                playerOnline.setSocketId(player.socketId);
+                permition= false;
             }
         })
 
         if(permition){
-            this.usersConnect.push(player);
-            this.emmitUsersConnect();
+            this.currentUsers.push(player);
         }
-
-    }
-
-    removeUserConnection(socketId){
-        this.usersConnect.forEach(player => {
-
-            if(player.socketId == socketId){
-                this.usersConnect.splice(this.usersConnect.indexOf(player), 1);
-            }
-           
-        })
         
-        console.log("Users Connect: " + this.usersConnect);
-        this.emmitUsersConnect();
-    }   
-
-    // Atualiza o estado da lista de usuários para os clients  
-    emmitUsersConnect(){
-        this.io.emit('userConnectionUpdate', this.usersConnect);
+        this.io.emit('usersServer', this.currentUsers);
     }
 
+    // Remove do lobby o usuario
+    removeUserConnection(charName){
 
-    // ===============================================================================================================
-    // ROOMS CONTROL
-    // ===============================================================================================================
-    addNewRoom(room){
-        this.rooms.push(room);
-        console.log("Nova sala criada!");
-        this.emitRoomsData();
+        let playerList = this.currentUsers;
+        for(let i=0; i<playerList.length; i++){
+            if(playerList[i].name == charName){
+                playerList.splice(playerList.indexOf(playerList[i]), 1);
+            }
+        }
     }
 
-    removeRoom(roomId){
-
-        this.rooms.forEach(room =>{
-            if(room.id == roomId){
-                this.rooms.splice(this.rooms.indexOf(room), 1);
-            } 
+    updateSocketConnection(charName, socketId){
+        this.currentUsers.forEach(playerOnline => {
+            if(playerOnline.name == charName){
+                playerOnline.setSocketId(socketId);
+            }
         })
-        console.log("Sala removida com sucesso!");
-        this.emitRoomsData();
-
     }
 
-    // Enviando dados da sala para todos os sockets
-    emitRoomsData(){
-        this.io.emit('roomsOpen', this.rooms);
+    // EMITINDO DADOS DE TODAS AS REGIÕES
+    emitRegionsData(){
+        this.io.emit('regionsData', this.regions);
     }
-
 
 }
 

@@ -1,5 +1,8 @@
 function playerAction(self){
 
+    let regionId = localStorage.getItem('regionId');
+    let sceneId = localStorage.getItem('sceneId');
+    
     var command = 0;
 
      // Player movs
@@ -30,7 +33,7 @@ function playerAction(self){
         var y = self.playerActive.y;
      
         if (self.playerActive.oldPosition && (x !== self.playerActive.oldPosition.x || y !== self.playerActive.oldPosition.y)) {
-            socket.emit('movimentPlayer', { x, y, command });
+            socket.emit('movimentPlayer', { x, y, command, regionId, sceneId});
         }
 
         // save old position data
@@ -42,7 +45,7 @@ function playerAction(self){
 
         // ATTACK CONTROLLER
         if(self.cursors.R.isDown){
-            socket.emit('attackPlayer', {attack: true, skillName: 'Star'});   
+            socket.emit('attackPlayer', {attack: true, skillName: 'Star', regionId, sceneId});   
         }
 
 

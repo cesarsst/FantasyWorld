@@ -33,7 +33,7 @@ class Cogumelo{
 
         //  CONTROLE DO HP DO MOB
         if(this.hp <= 0){
-            room.removeEnime(this, self);
+            room.removeEnime(this);
         }
 
         // CONTROLE DA MOVIMENTAÇÃO -- DIRECTION => 0 right , 1 left;

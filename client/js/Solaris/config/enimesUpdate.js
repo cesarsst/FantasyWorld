@@ -21,9 +21,6 @@ function enimesUpdate(self, enimeData){
     }
 
 
-   
-
-
 }
 
 
@@ -35,9 +32,12 @@ function setEnimePosition(enimeContainer, enimeData){
     } else {
         //enimeContainer.body.setVelocityX(-5); // Left
     }
+
+    // Setando posição
     enimeContainer.x = enimeData.x;
     enimeContainer.y = enimeData.y;
 
+    // Setando HP do mob
     if(enimeContainer.hp != enimeData.hp){
         enimeContainer.hp = enimeData.hp
         enimeContainer.getAt(2).setText(enimeData.hp);
@@ -76,7 +76,6 @@ function addEnime(enimeData, self){
     container.id = enimeData.id;
     container.animation = "";
     container.hp = "";
-
     container.setSize(40, 40);
     container.add(newEnime);
     container.add(name);

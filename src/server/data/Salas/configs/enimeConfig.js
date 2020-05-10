@@ -22,9 +22,8 @@ module.exports = (room, Game)=>{
      * Remove um enimigo da lista de currentEnimes
      * 
      * @param {Object} enime Instância do enimigo
-     * @param {Object} Game Instância da classe Game
      */
-    room.removeEnime = function(enimeRemove, Game){
+    room.removeEnime = function(enimeRemove){
         room.currentEnimes.forEach(enime => {
             if(enime.id == enimeRemove.id){
                 room.currentEnimes.splice(room.currentEnimes.indexOf(enime), 1);

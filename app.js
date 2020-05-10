@@ -1,7 +1,7 @@
 const app = require('./server');
 const port = process.env.PORT ||  3000;
 
-const Game = require('./src/server/game');
+const Game = require('./src/server/Game');
 
 // Configurações do servidor
 const server = app.listen(port, ()=>{

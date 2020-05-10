@@ -17,6 +17,11 @@ class gameStart extends Phaser.Scene{
         
         // Create Chat
         this.createUI();
+        
+        this.camera = this.cameras.main;
+        this.camera.setBounds(0, 0, 5000, 3000);
+        this.camera.setSize(1000, 600);
+
     }
 
     update(){
@@ -27,18 +32,26 @@ class gameStart extends Phaser.Scene{
         // Recebendo dados do teclado
         playerAction(this);
         
-        
+        cameraUpdate(this, this.camera);
     }
 
     // Funções da Scene
     createMap(){
          // Céu
+
+        
+         // PROPRIEDADES DO MUNDO
+         this.physics.world.setBounds(0, 0, 5000, 3000);
+         
+        // Background propriedades
          this.background = this.add.tileSprite(0, 0, config.width, config.height, 'solaris', "background.png");
          this.background.setOrigin(0,0);
+         this.background.setScrollFactor(0);
  
          // Plataformas
          this.piso = this.physics.add.staticGroup();
          this.piso.create(0, 540,'solaris','piso.png').setOrigin(0,0);
+         this.piso.create(1000, 540,'solaris','piso.png').setOrigin(0,0);
          this.piso.create(250,280,'solaris','plataform.png');
          this.piso.create(650,387,'solaris','plataform.png');
          this.piso.refresh();
@@ -107,11 +120,12 @@ class gameStart extends Phaser.Scene{
         this.cursors = this.input.keyboard.addKeys('W,S,A,D,R');
 
         var chat = this.add.dom(10, 450).createFromCache('chat');
+        chat.setOrigin(0,0);
+        chat.setScrollFactor(0);
+
         var inputTextValue = chat.getChildByName('textInput');
         var textArea = document.getElementById('textArea');
 
-        chat.setOrigin(0,0);
-        
         chat.addListener('click');
         chat.on('click', (event) => {
 
@@ -124,7 +138,9 @@ class gameStart extends Phaser.Scene{
                 this.cursors = this.input.keyboard.addKeys('W,S,A,D,R');
                 if(inputTextValue.value != ""){
                     //Socket Chat Emmiter
-                    this.socket.emit('msgPlayer', {msg:inputTextValue.value});
+                    let regionId = localStorage.getItem('regionId');
+                    let sceneId = localStorage.getItem('sceneId');
+                    this.socket.emit('msgPlayer', {msg:inputTextValue.value, regionId, sceneId});
                 }
                 inputTextValue.value = "";
             } 
@@ -132,6 +148,7 @@ class gameStart extends Phaser.Scene{
         });
 
         this.chatButton = this.add.image(0,300, "star").setOrigin(0,0).setInteractive();
+        this.chatButton.setScrollFactor(0);
         this.chatButton.on('pointerup', function(){
             if(chat._visible == false){
                 chat.setVisible(true);

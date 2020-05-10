@@ -1,38 +1,38 @@
 var charName = localStorage.getItem('charName');
 var socket = io();
 
-var indexRoom = [];
+var indexregion = [];
 
 // Character login in Lobby
 socket.emit('loginCharacter', {name: charName});
 
 
 // Rebendo novas conexões do lobby
-socket.on('userConnectionUpdate', (usersConnect)=>{
-    console.log('Usuarios no lobby:',  usersConnect);
+socket.on('usersServer', (usersConnect)=>{
+    console.log('Usuarios no servidor: ',  usersConnect);
 });
 
 
 // Solicitando sala já criadas
-socket.emit('requestRooms');
+socket.emit('requestRegions');
 
 // Recebendo Salas criadas
-socket.on('roomsOpen', (rooms)=>{
-    console.log('Salas Status:', rooms);
+socket.on('regionsData', (regions)=>{
+    console.log('Regiões online:', regions);
 
     // Adicionado botões para entrar na sala 
     const lobbyContainer = document.getElementsByClassName('lobby-container');
-    if(rooms.length != 0){
-        rooms.forEach(room => {
+    if(regions.length != 0){
+        regions.forEach(region => {
 
-            if(indexRoom.indexOf(room.id) == -1){
+            if(indexregion.indexOf(region.id) == -1){
                 
                 // Adicionando no indice de salar
-                indexRoom.push(room.id)
+                indexregion.push(region.id)
                 
-                let func = 'enterRoom('+ room.id +',"'+ room.map +'");'
-                let sala = "<button onclick="+ func +">Sala:"+ room.id +"</button>"
-                 $(lobbyContainer).append(sala);
+                let func = 'enterRegion('+ region.id +',"'+ region.nameMap +'");'
+                let regionButton = "<button onclick="+ func +">"+ region.nameMap +"</button>"
+                 $(lobbyContainer).append(regionButton);
     
             }
 
@@ -42,7 +42,7 @@ socket.on('roomsOpen', (rooms)=>{
 });
 
 // Redirecionando para sala
-socket.on('redirectRoom', (map)=>{
+socket.on('redirectRegion', (map)=>{
     location.href = '/'+ map +'';
 })
 
@@ -51,25 +51,21 @@ socket.on('msgErro', (data) =>{
     alert(data.msg);
 })
 
-// Criando uma nova sala
-function createRoom(mapName){
-    // Create new Room
-    socket.emit('createSala', map=mapName);
-
-}
 
 //Entrando em uma sala
-function enterRoom(id, map){
+function enterRegion(id, nameMap){
 
-    localStorage.setItem('roomId', id); // Salva sala atual
-    socket.emit('enterRoom', {roomId: id, roomMap: map, charName});
+    let regionId = id;
+    localStorage.setItem('regionId', id); // Salva sala atual
+    localStorage.setItem('sceneId', 0); // Salva sala atual
+    socket.emit('enterRegion', {charName, regionId, nameMap});
     
 }
 
 // Desconectar
 function sair(){
     socket.emit('sair');
-    localStorage.removeItem('roomId');
+    localStorage.removeItem('regionId');
     localStorage.removeItem('charName');
     location.href = '/sair';
 }

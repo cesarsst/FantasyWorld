@@ -1,6 +1,8 @@
 var socket  = io();
+
 var charName = localStorage.getItem('charName');
-var roomId = localStorage.getItem('roomId');
+var regionId = localStorage.getItem('regionId');
+var sceneId = localStorage.getItem('sceneId');
 
 function gameUpdate(self){
     
@@ -16,11 +18,20 @@ function gameUpdate(self){
     self.attacksGroup = self.add.group();
     
 
-    // Atualiza socket do usuario e cadastra na sala
-    socket.emit('updateSocket', {name: charName, roomId: roomId});
+    // TIRAR O JOIN DO UPDATE!
+    // Atualiza socket do usuario e cadastra na sala 
+    socket.emit('updateSocket', {charName, regionId, sceneId});
+
+
+     // Recebendo atualizações da região
+     socket.on('regionsPlayers', (roomPlayers)=>{
+        roomPlayers.forEach(player => {
+                playersUpdate(self, player);
+        })
+    });
 
     // PLAYERS CONTROLLER
-    socket.on('roomData', (roomPlayers)=>{
+    socket.on('roomDataPlayers', (roomPlayers)=>{
         roomPlayers.forEach(player => {
                 playersUpdate(self, player);
         })
@@ -49,14 +60,11 @@ function gameUpdate(self){
     })
 
     // CHAT CONTROLLER
-    socket.on('roomDataChat', (messages)=>{
+    socket.on('roomDataChat', (message)=>{
         var textArea = document.getElementById('textArea');
         $(textArea).animate({ scrollTop: 99999999 }, 'slow');
-        messages.forEach(message => {
-            $(textArea).append(message.player + ': '+ message.msg + '<br>');
-        })
-        
-        
+        $(textArea).append(message.player + ': '+ message.msg + '<br>');
     })
+
 
 }

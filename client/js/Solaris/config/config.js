@@ -19,7 +19,7 @@ var config = {
             enableBody: true,
         }
     },
-    scene: [preload, gameStart]
+    scene: [preload, gameStart, ui]
 
 };
 

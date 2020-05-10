@@ -1,5 +1,5 @@
 const Cogumelo = require('../Enimes/Cogumelo');
-const randomPosition = require('../../configs/utils/randomPosition');
+const randomPosition = require('./utils/randomPosition');
 
 /**
  * Inimigos presentes na sala 
@@ -37,7 +37,7 @@ module.exports.events = () => {
         { 
             id:2,
             start: dieMotherFuck,
-            status: true
+            status: false
         },
     ]
 
