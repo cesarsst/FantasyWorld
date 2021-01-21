@@ -16,7 +16,7 @@
     "express-session": "^1.17.0",
     "mongoose": "^5.9.9",
     "phaser3-rex-plugins": "^1.1.14",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
